@@ -9,9 +9,8 @@ namespace GlobalATM.Models
     [NotMapped]
 
     [Required]
-    [RegularExpression(@"^[\w!#$%&'+-/=?^_`{|}~]+(.[\w!#$%&'+-/=?^_`{|}~]+)*" + "@" + @"((([-\w]+.)+[a-zA-Z]{2,4})|(([0-9]{1,3}.){3}[0-9]{1,3}))\z")]
-    [EmailAddress]
-    public string LoginEmail {get; set;}
+    public string LoginAccountNum {get; set;}
+
 
     [DataType(DataType.Password)]
     [Required]

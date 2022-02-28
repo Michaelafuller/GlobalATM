@@ -53,7 +53,6 @@ namespace GlobalATM.Controllers
         {
             if (ModelState.IsValid) 
             {
-                if (db.Users.Any(u=> u.Email == newUser.Email)) 
                 {
                     ModelState.AddModelError("Email", "Email is already in use");
                     return View("Index");
@@ -136,23 +135,30 @@ namespace GlobalATM.Controllers
         {
             if (ModelState.IsValid)
             {
-                User userindb = db.Users.FirstOrDefault(u => u.Email == logUser.LoginEmail);
-                if (userindb == null)
+                Account account = db.Accounts
+                                    .Include(a => a.User).
+                                        FirstOrDefault(u => u.AccountNumber == logUser.LoginAccountNum);
+                Account checkingAccount = db.Checkings
+                                            .Include(u => u.User)
+                                                .FirstOrDefault(u => u.CardNumber == logUser.LoginAccountNum);
+                // if (db.Users.Any(u=> u.Email == newUser.Email)) 
+                //User userindb = db.Users.FirstOrDefault(u => u.Email == logUser.LoginEmail);
+                if (checkingAccount == null)
                 {
-                    ModelState.AddModelError("LoginEmail", "Invalid login attempt");
+                    ModelState.AddModelError("LoginAccountNum", "Invalid login attempt");
                     return View("Login");
                 }
                 //check if password is correct
                 PasswordHasher<LogUser> Hasher = new PasswordHasher<LogUser>();
-                PasswordVerificationResult result = Hasher.VerifyHashedPassword(logUser, userindb.Pin, logUser.LoginPin); 
+                PasswordVerificationResult result = Hasher.VerifyHashedPassword(logUser, checkingAccount.User.Pin, logUser.LoginPin); 
                 //When the vertifcation runs, it will passed 1(successfully) or 0(password is incorrect)
                 if (result == 0)
                 {
-                    ModelState.AddModelError("LoginEmail", "Invalid login attempt");
+                    ModelState.AddModelError("LoginPin", "Invalid login attempt");
                     return View("Login");
                 }
 
-                HttpContext.Session.SetInt32("UserId", userindb.UserId);
+                HttpContext.Session.SetInt32("UserId", checkingAccount.User.UserId);
                 return RedirectToAction("Dashboard");
             }
             return View("Login");

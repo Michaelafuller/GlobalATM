@@ -54,6 +54,9 @@ namespace GlobalATM.Models
         [NotMapped]
         public string CardNumber {get; set;}
 
+        [NotMapped]
+        public string AccountNumber {get; set;}
+
         public class MinAge : ValidationAttribute
         {
             private int _Limit;
