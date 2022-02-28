@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GlobalATM.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220228025020_Second")]
-    partial class Second
+    [Migration("20220228041424_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,10 +86,6 @@ namespace GlobalATM.Migrations
 
                     b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");

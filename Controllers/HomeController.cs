@@ -13,8 +13,26 @@ using GlobalATM.Models;
 
 namespace GlobalATM.Controllers
 {
+
     public class HomeController : Controller
     {
+
+        private int? UUID
+        {
+            get
+            {
+                return HttpContext.Session.GetInt32("UserId");
+            }
+        }
+
+        private bool isLoggedIn
+        {
+            get
+            {
+                return UUID != null;
+            }
+        }
+
         private readonly ILogger<HomeController> _logger;
         private MyContext db;
 
@@ -24,13 +42,13 @@ namespace GlobalATM.Controllers
             db = context;
         }
 
-        [HttpGet("")]
+        [HttpGet("/")]
         public IActionResult Index()
         {
             return View("Index");
         }
 
-        [HttpPost("register")]
+        [HttpPost("/register")]
         public IActionResult Register(User newUser, string AccountType, string CardNumber)
         {
             if (ModelState.IsValid) 
@@ -58,7 +76,7 @@ namespace GlobalATM.Controllers
                 db.Add(newUser);
                 db.SaveChanges();
                 HttpContext.Session.SetInt32("UserId", newUser.UserId);
-                return RedirectToAction("Success");
+                return RedirectToAction("Dashboard");
             }
 
             return View("Index");
@@ -107,7 +125,7 @@ namespace GlobalATM.Controllers
         //     return View("Index");
         // }
 
-        [HttpGet("Login")]
+        [HttpGet("/login")]
         public IActionResult LogIn()
         {
             return View("LogIn");
@@ -135,15 +153,28 @@ namespace GlobalATM.Controllers
                 }
 
                 HttpContext.Session.SetInt32("UserId", userindb.UserId);
-                return RedirectToAction("Success");
+                return RedirectToAction("Dashboard");
             }
             return View("Login");
         }
 
-        [HttpGet("Success")]
-        public IActionResult Success()
+        [HttpGet("/dashboard")]
+        public IActionResult Dashboard()
         {
-            return View("Success");
+            if(!isLoggedIn)
+            {
+                return RedirectToAction("LogIn");
+            }
+
+            User loggedUser = db.Users
+                .Include(u => u.Accounts)
+                .FirstOrDefault(u => u.UserId == (int)UUID);
+
+            ViewBag.allTransactions = db.Transactions
+                .Where(t => t.UserId == (int)UUID)
+                .ToList();
+
+            return View("Dashboard", loggedUser);
         }
 
         [HttpPost("logout")]
