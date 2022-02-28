@@ -53,6 +53,7 @@ namespace GlobalATM.Controllers
         {
             if (ModelState.IsValid) 
             {
+                if(db.Users.Any(u => u.Email == newUser.Email))
                 {
                     ModelState.AddModelError("Email", "Email is already in use");
                     return View("Index");
