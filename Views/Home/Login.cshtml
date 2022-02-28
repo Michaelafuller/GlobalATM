@@ -1,0 +1,19 @@
+@model LogUser
+
+<h2>Login</h2>
+<a asp-action="Index">Haven't activate your card yet?  Go ahead and sign up...</a>
+<hr>
+<form asp-action="Login" asp-controller="Home" method="post" class="logreg">
+    
+    <div class="form-group">
+        <span asp-validation-for="LoginEmail" class="text-danger"></span>
+        <label asp-for="LoginEmail"></label>
+        <input class="form-control" asp-for="LoginEmail">
+    </div>
+    <div class="form-group">
+        <span asp-validation-for="LoginPin" class="text-danger"></span>
+        <label asp-for="LoginPin"></label>
+        <input class="form-control" asp-for="LoginPin">
+    </div>
+    <input class="btn btn-primary" type="submit" value="Login">
+</form>
