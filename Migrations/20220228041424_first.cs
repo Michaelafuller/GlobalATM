@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GlobalATM.Migrations
 {
-    public partial class First : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,6 @@ namespace GlobalATM.Migrations
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    CardNumber = table.Column<string>(nullable: false),
                     Pin = table.Column<string>(nullable: false),
                     Birthday = table.Column<DateTime>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -38,12 +37,10 @@ namespace GlobalATM.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     AccountNumber = table.Column<string>(nullable: true),
-                    CardNumber = table.Column<string>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    InterestRate = table.Column<double>(nullable: true),
                     RoutingNumber = table.Column<string>(nullable: true),
-                    Saving_InterestRate = table.Column<double>(nullable: true),
-                    SavActNum = table.Column<string>(nullable: true)
+                    Discriminator = table.Column<string>(nullable: false),
+                    CardNumber = table.Column<string>(nullable: true),
+                    InterestRate = table.Column<double>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,9 +60,9 @@ namespace GlobalATM.Migrations
                     TransactionId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(nullable: false),
+                    AccountId = table.Column<int>(nullable: true),
                     Amount = table.Column<double>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    AccountId = table.Column<int>(nullable: true)
+                    CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,12 +73,6 @@ namespace GlobalATM.Migrations
                         principalTable: "Accounts",
                         principalColumn: "AccountId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -93,11 +84,6 @@ namespace GlobalATM.Migrations
                 name: "IX_Transactions_AccountId",
                 table: "Transactions",
                 column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserId",
-                table: "Transactions",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
