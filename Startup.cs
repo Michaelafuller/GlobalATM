@@ -26,8 +26,13 @@ namespace GlobalATM
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyContext>(options => options.UseMySql(
+
                 Configuration["DBInfo:ConnectionString"],
                 ServerVersion.FromString("8.0.23-mysql")));
+
+                    Configuration["DBInfo:ConnectionString"],
+                    ServerVersion.FromString("8.0.23-mysql")));
+
 
             // to access session directly from view, corresponds with: @using Microsoft.AspNetCore.Http in Views/_ViewImports.cshtml
             services.AddHttpContextAccessor();

@@ -22,4 +22,8 @@ namespace GlobalATM.Models
         public ConversionRaw[] conversion {get;set;}
     }
     // var conversionObject = JsonConvert.DeserializeObject<ConversionObject>(json);
+
 } 
+
+}    
+
